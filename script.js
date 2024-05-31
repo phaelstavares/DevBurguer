@@ -154,7 +154,11 @@ checkoutBtn.addEventListener("click", function() {
     }
 
     // Enviar pedido para API do WhatsApp
-    
+    const cartItems = cart.map((item) => {
+        return (
+            ` ${item.name} Quantidade: (${item.quantity}) Preço: ${item.price} |`
+        )
+    }).join("")
 })
 
 // Verificar o horário e manipular o card
