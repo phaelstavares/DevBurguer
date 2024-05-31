@@ -140,9 +140,23 @@ addressInput.addEventListener("input", function(event) {
 
 // Finalizar pedido
 checkoutBtn.addEventListener("click", function() {
+    
     const isOpen = checkRestaurantOpen();
     if(!isOpen) {
-        alert("RESTAURANTE FECHADO NO MOMENTO")
+        
+        // Toastify é uma biblioteca de notificação (alert)
+        Toastify({
+            text: "Ops, a hamburgueria está fechada no momento!",
+            duration: 3000,
+            close: true,
+            gravity: "top", // `top` or `bottom`
+            position: "right", // `left`, `center` or `right`
+            stopOnFocus: true, // Prevents dismissing of toast on hover
+            style: {
+              background: "#ef4444",
+            },
+        }).showToast();
+
         return;
     }
 
@@ -156,9 +170,17 @@ checkoutBtn.addEventListener("click", function() {
     // Enviar pedido para API do WhatsApp
     const cartItems = cart.map((item) => {
         return (
-            ` ${item.name} Quantidade: (${item.quantity}) Preço: ${item.price} |`
+            ` ${item.name} (${item.quantity}) - Preço: R$ ${(item.quantity * item.price).toFixed(2)} | `
         )
     }).join("")
+
+    const message = encodeURIComponent(cartItems)
+    const phone = "32984252594"
+
+    window.open(`https://wa.me/${phone}?text=${message} Endereço: ${addressInput.value}`, "_blank")
+
+    cart = [];
+    updateCartModal();
 })
 
 // Verificar o horário e manipular o card
